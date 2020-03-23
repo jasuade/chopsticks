@@ -9,11 +9,12 @@ import (
 const DEFAULT_GAME_CONFIGURATION_PATH = "game.config"
 
 func main() {
-	_, err := config.OpenConfig(DEFAULT_GAME_CONFIGURATION_PATH)
+	//Read configuration file
+	config, err := config.OpenConfig(DEFAULT_GAME_CONFIGURATION_PATH)
 	if err != nil {
 		log.Fatal(err)
 	}
-	//Read the configuration file
 	//Set the game
+	createGame(config)
 	//Start the game
 }

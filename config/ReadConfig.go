@@ -20,8 +20,7 @@ func OpenConfig(path string) (*Configuration, error) {
 		return nil, err
 	}
 	fmt.Println("Reading the file")
-	//return ReadConfig(file), nil
-	return nil, nil
+	return ReadConfig(file), nil
 }
 
 func ReadConfig(file *os.File) *Configuration {
