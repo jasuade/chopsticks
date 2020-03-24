@@ -15,13 +15,12 @@ type Configuration struct {
 }
 
 func OpenConfig(path string) (*Configuration, error) {
-	fmt.Println("Opening a file ")
 	var file, err = os.OpenFile(path, os.O_RDONLY, 0644)
 	defer file.Close()
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println("Reading the file")
+	fmt.Println("Reading configuration file . . .")
 	return ReadConfig(file), nil
 }
 

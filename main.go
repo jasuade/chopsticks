@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 
 	"github.hc.ag/jsuarez/chopsticks/config"
@@ -19,8 +20,13 @@ func main() {
 	//Set the game
 	players := make([]game.Player, config.Players)
 	players = game.CreateGame(config)
+
 	//Start the game
-	game.StartGame(players)
+	fmt.Printf("Start the game with %d payers in mode <%s> and level <%s> \n", config.Players, config.Mode, config.Difficulty)
+	turn := game.StartGame(players, config)
 	ui.DisplayStatus(players)
+	fmt.Printf("Player %d is your turn", turn)
+
+	//Check status
 
 }

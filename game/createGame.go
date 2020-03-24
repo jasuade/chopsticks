@@ -26,17 +26,5 @@ func CreateGame(config *config.Configuration) []Player {
 func StartGame(players []Player, config *config.Configuration) int {
 	rand.Seed(time.Now().UnixNano())
 	playerTurn := rand.Intn(config.Players)
-	for {
-		//PlayTurn(players, playerTurn)
-		return playerTurn
-		//EvalStatus(players)
-	}
+	return playerTurn
 }
-
-// func PlayTurn(players []Player, playerTurn int) {
-// 	DisplayStatus(players)
-// 	// reader := bufio.NewReader(os.Stdin)
-// 	// fmt.Print("Enter your city: ")
-// 	// city, _ := reader.ReadString('\n')
-// 	// fmt.Print("You live in " + city)
-// }
