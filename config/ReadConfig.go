@@ -4,10 +4,12 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 )
 
 type Configuration struct {
+	Players    int
 	Difficulty string
 	Mode       string
 }
@@ -39,6 +41,10 @@ func parseConfig(config *Configuration, fileTextLines []string) *Configuration {
 	for _, eachline := range fileTextLines {
 		fields := strings.Split(eachline, ":")
 		switch strings.TrimSpace(fields[0]) {
+		case "players":
+			{
+				config.Players, _ = strconv.Atoi(strings.TrimSpace(fields[1]))
+			}
 		case "difficulty":
 			{
 				config.Difficulty = strings.TrimSpace(fields[1])
@@ -48,7 +54,6 @@ func parseConfig(config *Configuration, fileTextLines []string) *Configuration {
 				config.Mode = strings.TrimSpace(fields[1])
 			}
 		}
-		fmt.Println(fields)
 	}
 	return config
 }

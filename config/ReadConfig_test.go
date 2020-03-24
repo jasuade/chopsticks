@@ -16,6 +16,7 @@ func TestReadConfiguration(t *testing.T) {
 
 	t.Run("Test to read the first line of the file", func(t *testing.T) {
 		want := &Configuration{
+			2,
 			"easy",
 			"cutoff",
 		}
