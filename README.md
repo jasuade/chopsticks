@@ -38,8 +38,8 @@ The first implementation of this game will be done without configuration using t
 These configurations include;
 - Difficulty: easy (the computer execute random allowed movements without aim to win), medium (there is aim to win but with restrictios), hard (always aim to win or tie)
 - Palyers: 1 (to play against the machine), 2 (to play between two players), 3 or more (to be decided)
-- Other configurations:
-    - Suicide: You are allowed to kill one of your own hands with a split. You can [12-01] --> [03-01]
+- Other configurations (Modes):
+    - Suicide: You are allowed to kill one of your own hands with a split. You can [12-01] --> [03-01].
     - Swaps: If you have two unequal live hands, you may swap them (essentially forfeiting your turn).
     - Sudden Death: You lose when you only have one finger left total. Alternately, each player could begin with three lives, and every time they get down to [01], they lose a life.
     - Meta: If your hands add up to over five, you can combine them, subtract five from the total, and then split up the remainder. For example, [44] adds up to 8. So under Meta rules, you can combine them into 8, which becomes 3, which you could then split into [12]. Therefore you could go from [44] to [12] in a single move. Meta unlocks 2 new possible moves (34-11, 44-12). If playing both Meta and Suicide, then 4 additional moves are unlocked (24-01, 33-01, 34-02, 44-03), for a total maximum of 20 possible moves.
