@@ -19,8 +19,7 @@ func TestCreateGame(t *testing.T) {
 
 	t.Run("When call startGame should return one random players to start", func(t *testing.T) {
 		config := &config.Configuration{2, "easy", "cutoff"}
-		players := []Player{Player{1, 1}, Player{1, 1}}
-		got := StartGame(players, config)
+		got := StartGame(config)
 		want := []int{0, 1}
 		if got != want[0] && got != want[1] {
 			t.Errorf("Error: got %v but wanted %v\n", got, want)

@@ -23,10 +23,11 @@ func main() {
 
 	//Start the game
 	fmt.Printf("Start the game with %d payers in mode <%s> and level <%s> \n", config.Players, config.Mode, config.Difficulty)
-	playerTurn := game.StartGame(players, config)
+	playerTurn := game.StartGame(config)
 	ui.DisplayStatus(players)
 	fmt.Printf("Player %d is your turn\n", playerTurn)
 	game.PlayTurn(players, playerTurn)
+	ui.DisplayStatus(players)
 
 	//Check status
 

@@ -1,6 +1,7 @@
 package game
 
 import (
+	"reflect"
 	"strings"
 	"testing"
 )
@@ -30,6 +31,27 @@ func TestPlayTurns(t *testing.T) {
 				//Asset
 				if got != tcase.want {
 					t.Errorf("Error: got %v but wanted %v\n", got, tcase.want)
+				}
+			})
+		}
+	})
+	t.Run("playSplit should modify the player correctly", func(t *testing.T) {
+		testCase := []struct {
+			desc         string
+			inputPlayer  *Player
+			wantedPlayer *Player
+		}{
+			{desc: "Test if both are less than or equal 1", inputPlayer: &Player{0, 1}, wantedPlayer: &Player{0, 1}},
+		}
+		for _, tcase := range testCase {
+			tcase := tcase
+			//Act
+			t.Run(tcase.desc, func(t *testing.T) {
+				t.Parallel()
+				tcase.inputPlayer.playSplit()
+				//Asset
+				if !reflect.DeepEqual(tcase.inputPlayer, tcase.wantedPlayer) {
+					t.Errorf("Error: got %v but wanted %v\n", tcase.inputPlayer, tcase.wantedPlayer)
 				}
 			})
 		}

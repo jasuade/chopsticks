@@ -23,7 +23,7 @@ func CreateGame(config *config.Configuration) []Player {
 }
 
 //StartGame comence the first turn of the a random selected player
-func StartGame(players []Player, config *config.Configuration) int {
+func StartGame(config *config.Configuration) int {
 	rand.Seed(time.Now().UnixNano())
 	playerTurn := rand.Intn(config.Players)
 	return playerTurn
