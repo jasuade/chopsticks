@@ -28,7 +28,6 @@ func playTurnFromReader(players []Player, playerTurn int, r io.Reader) string {
 		fmt.Println("You choose to split")
 		action = "split"
 		players[playerTurn].playSplit()
-		//split()
 	default:
 		action = "Invalid action"
 		fmt.Println(action)
@@ -50,27 +49,30 @@ func (player *Player) playSplit() {
 		fmt.Println("Unable to slpit, too many chopsticks, you cannot kill a hand")
 		return
 	}
-	fmt.Printf("%v\n", player)
 	if containsNumber(player, 0) {
 		if containsNumber(player, 4) {
-			containsNumberFour(player)
+			player.containsNumberFour(0)
 			return
 		}
 		if player.RightHand > player.LeftHand {
-			player.RightHand++
-			player.LeftHand--
+			player.RightHand--
+			player.LeftHand++
 			return
 		}
-		player.RightHand--
-		player.LeftHand++
+		player.RightHand++
+		player.LeftHand--
 		return
 	} else if player.RightHand == player.LeftHand {
 		player.RightHand--
 		player.LeftHand++
 		return
 	} else if int(math.Abs(float64(player.LeftHand-player.RightHand))) == 1 {
-		player.LeftHand = 1
-		player.RightHand = 4
+		if containsNumber(player, 2) && containsNumber(player, 3) {
+			player.LeftHand = 1
+			player.RightHand = 4
+			return
+		}
+		fmt.Printf("That is not a meaninful split, as %v will be {%d,%d} \n", player, player.RightHand, player.LeftHand)
 		return
 
 	} else if player.RightHand > player.LeftHand {
@@ -91,15 +93,21 @@ func containsNumber(player *Player, i int) bool {
 	return false
 }
 
-func containsNumberFour(player *Player) {
+func (player *Player) containsNumberFour(num int) {
 	fmt.Println("How many chopsticks you want to transfere?")
-	var num int
 	fmt.Scan(&num)
 	if num == 1 {
+		if player.RightHand > player.LeftHand {
+			player.RightHand--
+			player.LeftHand++
+			return
+		}
 		player.RightHand++
 		player.LeftHand--
 		return
 	}
-	player.RightHand += 2
-	player.LeftHand -= 2
+	player.RightHand = 2
+	player.LeftHand = 2
+	return
+
 }

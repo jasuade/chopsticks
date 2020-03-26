@@ -9,8 +9,8 @@ import (
 
 //Player is an structure that represent each of the game participants
 type Player struct {
-	RightHand int
 	LeftHand  int
+	RightHand int
 }
 
 //CreateGame initialize the Number of players defined in the configutarion to the init state
