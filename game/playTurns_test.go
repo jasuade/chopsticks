@@ -107,7 +107,7 @@ func TestPlayTurns(t *testing.T) {
 			//Act
 			t.Run(tcase.desc, func(t *testing.T) {
 				t.Parallel()
-				tcase.inputPlayer.containsNumberFour(tcase.inputNumber)
+				tcase.inputPlayer.splitWithZeroFour(tcase.inputNumber)
 				//Asset
 				if !reflect.DeepEqual(tcase.inputPlayer, tcase.wantedPlayer) {
 					t.Errorf("Error: got %v but wanted %v\n", tcase.inputPlayer, tcase.wantedPlayer)

@@ -51,20 +51,10 @@ func (player *Player) playSplit() {
 	}
 	if containsNumber(player, 0) {
 		if containsNumber(player, 4) {
-			player.containsNumberFour(0)
+			player.splitWithZeroFour(0)
 			return
 		}
-		if player.RightHand > player.LeftHand {
-			player.RightHand--
-			player.LeftHand++
-			return
-		}
-		player.RightHand++
-		player.LeftHand--
-		return
-	} else if player.RightHand == player.LeftHand {
-		player.RightHand--
-		player.LeftHand++
+		player.higherToLower()
 		return
 	} else if int(math.Abs(float64(player.LeftHand-player.RightHand))) == 1 {
 		if containsNumber(player, 2) && containsNumber(player, 3) {
@@ -74,15 +64,12 @@ func (player *Player) playSplit() {
 		}
 		fmt.Printf("That is not a meaninful split, as %v will be {%d,%d} \n", player, player.RightHand, player.LeftHand)
 		return
-
-	} else if player.RightHand > player.LeftHand {
-		player.RightHand--
-		player.LeftHand++
+	} else if player.RightHand >= player.LeftHand {
+		player.higherToLower()
 		return
 	}
 	player.RightHand++
 	player.LeftHand--
-
 }
 
 //Receives a player and a number return true if the number is in the arra, false otherwise
@@ -93,17 +80,22 @@ func containsNumber(player *Player, i int) bool {
 	return false
 }
 
-func (player *Player) containsNumberFour(num int) {
+func (player *Player) higherToLower() {
+	if player.RightHand >= player.LeftHand {
+		player.RightHand--
+		player.LeftHand++
+		return
+	}
+	player.RightHand++
+	player.LeftHand--
+	return
+}
+
+func (player *Player) splitWithZeroFour(num int) {
 	fmt.Println("How many chopsticks you want to transfere?")
 	fmt.Scan(&num)
 	if num == 1 {
-		if player.RightHand > player.LeftHand {
-			player.RightHand--
-			player.LeftHand++
-			return
-		}
-		player.RightHand++
-		player.LeftHand--
+		player.higherToLower()
 		return
 	}
 	player.RightHand = 2
