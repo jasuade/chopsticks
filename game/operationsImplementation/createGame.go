@@ -24,6 +24,7 @@ type PlayerI interface {
 func CreateGame(config *config.Configuration) []PlayerI {
 	players := make([]PlayerI, config.Players)
 	for i := 0; i < config.Players; i++ {
+		//players[i] = &PlayerOperationsImpl{&Player{1, 1}}
 		players[i] = &PlayerOperationsImpl{&Player{1, 1}}
 	}
 	return players

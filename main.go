@@ -5,8 +5,8 @@ import (
 	"log"
 
 	"github.hc.ag/jsuarez/chopsticks/config"
-	"github.hc.ag/jsuarez/chopsticks/game"
-	"github.hc.ag/jsuarez/chopsticks/ui"
+	game "github.hc.ag/jsuarez/chopsticks/game/stateMachineImplementation"
+	ui "github.hc.ag/jsuarez/chopsticks/ui"
 )
 
 const DEFAULT_GAME_CONFIGURATION_PATH = "game.config"
