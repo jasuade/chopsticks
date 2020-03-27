@@ -7,19 +7,20 @@ import (
 	"github.hc.ag/jsuarez/chopsticks/config"
 )
 
-//Player is an structure that represent each of the game participants
+//Player is an structure that represent each game participant
 type Player struct {
 	LeftHand  int
 	RightHand int
 }
 
+//PlayerI is the interface for the different implementations of the player and its actions
 type PlayerI interface {
 	GetPlayer() *Player
 	playSplit()
 	playAttack()
 }
 
-//CreateGame initialize the Number of players defined in the configutarion to the init state
+//CreateGame initialize the Number of players defined in the configutarion to the initial state
 func CreateGame(config *config.Configuration) []PlayerI {
 	players := make([]PlayerI, config.Players)
 	for i := 0; i < config.Players; i++ {
@@ -28,7 +29,7 @@ func CreateGame(config *config.Configuration) []PlayerI {
 	return players
 }
 
-//StartGame comence the first turn of the a random selected player
+//StartGame comence the first turn of the game with a random selected player
 func StartGame(config *config.Configuration) int {
 	rand.Seed(time.Now().UnixNano())
 	playerTurn := rand.Intn(config.Players)

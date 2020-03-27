@@ -5,15 +5,21 @@ import (
 	"math"
 )
 
+//PlayerOperationsImpl is the current implementation of the interface PlayerI, implementation done with math operations
 type PlayerOperationsImpl struct {
 	Player *Player
 }
 
+//GetPlayer function restuns the Current implementation of the Player
 func (poi *PlayerOperationsImpl) GetPlayer() *Player {
 	return poi.Player
 }
 
+//Should receive all players with its status, execute attack from a player and return the new status
 func (poi *PlayerOperationsImpl) playAttack() {
+	//TODO: chose the hand to attack with
+	//TODO: chose the enemy and the hand's enemy to be attacked
+	//TODO: execute the attack
 }
 
 //Should receive a player with an status and return the same player with different status

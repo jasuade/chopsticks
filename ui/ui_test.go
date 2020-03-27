@@ -8,8 +8,8 @@ import (
 
 func TestUIDisplaying(t *testing.T) {
 	t.Run("When call DisplayStatus the status of the game is displayed in the console", func(t *testing.T) {
-		player1 := &game.PlayerOperationsImpl{&game.Player{5, 3}}
-		player2 := &game.PlayerOperationsImpl{&game.Player{1, 4}}
+		player1 := &game.PlayerOperationsImpl{Player: &game.Player{LeftHand: 5, RightHand: 3}}
+		player2 := &game.PlayerOperationsImpl{Player: &game.Player{LeftHand: 1, RightHand: 4}}
 
 		players := []game.PlayerI{player1, player2}
 		err := DisplayStatus(players)

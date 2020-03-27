@@ -8,12 +8,14 @@ import (
 	"strings"
 )
 
+//Configuration of the game
 type Configuration struct {
 	Players    int
 	Difficulty string
 	Mode       string
 }
 
+//OpenConfig opens a read-only file with the game configuration
 func OpenConfig(path string) (*Configuration, error) {
 	var file, err = os.OpenFile(path, os.O_RDONLY, 0644)
 	defer file.Close()
@@ -24,6 +26,7 @@ func OpenConfig(path string) (*Configuration, error) {
 	return ReadConfig(file), nil
 }
 
+//ReadConfig reads configuration of the game from a file
 func ReadConfig(file *os.File) *Configuration {
 	config := &Configuration{}
 
@@ -36,6 +39,7 @@ func ReadConfig(file *os.File) *Configuration {
 	return parseConfig(config, fileTextLines)
 }
 
+//parseConfig includes the read configuration into the Configuration
 func parseConfig(config *Configuration, fileTextLines []string) *Configuration {
 	for _, eachline := range fileTextLines {
 		fields := strings.Split(eachline, ":")
