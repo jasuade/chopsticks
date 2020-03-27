@@ -5,7 +5,7 @@ import (
 	"log"
 
 	"github.hc.ag/jsuarez/chopsticks/config"
-	game "github.hc.ag/jsuarez/chopsticks/game/stateMachineImplementation"
+	game "github.hc.ag/jsuarez/chopsticks/game/operationsImplementation"
 	ui "github.hc.ag/jsuarez/chopsticks/ui"
 )
 

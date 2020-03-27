@@ -22,7 +22,7 @@ func playTurnFromReader(players []PlayerI, playerTurn int, r io.Reader) string {
 	case "a":
 		fmt.Println("You choose to attack")
 		action = "attack"
-		//attack()
+		chooseAttack(players, playerTurn, os.Stdin)
 	case "s":
 		fmt.Println("You choose to split")
 		action = "split"

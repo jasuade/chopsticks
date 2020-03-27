@@ -1,7 +1,9 @@
 package game
 
 import (
+	"bufio"
 	"fmt"
+	"io"
 	"math"
 )
 
@@ -16,10 +18,23 @@ func (poi *PlayerOperationsImpl) GetPlayer() *Player {
 }
 
 //Should receive all players with its status, execute attack from a player and return the new status
-func (poi *PlayerOperationsImpl) playAttack() {
-	//TODO: chose the hand to attack with
+func chooseAttack(players []PlayerI, playerTurn int, r io.Reader) {
+	reader := bufio.NewReader(r)
+	if len(players) < 2 {
+		fmt.Printf("Which player %v do you want to attack:\n", players)
+	}
+	fmt.Printf("And which hand (left(l) or right(r))do you want to attack:\n")
+	action, _ := reader.ReadString('\n')
+	fmt.Println(action)
+	//action = strings.TrimSpace(action)
+
 	//TODO: chose the enemy and the hand's enemy to be attacked
 	//TODO: execute the attack
+}
+
+//
+func (poi *PlayerOperationsImpl) playAttack() {
+
 }
 
 //Should receive a player with an status and return the same player with different status

@@ -4,7 +4,7 @@ package ui
 import (
 	"fmt"
 
-	game "github.hc.ag/jsuarez/chopsticks/game/stateMachineImplementation"
+	game "github.hc.ag/jsuarez/chopsticks/game/operationsImplementation"
 )
 
 //EMOJI_FINGER chopsticks represent a finger in a 5-fingers hand

@@ -88,3 +88,12 @@ func TestPlaySplitOperationsImpl(t *testing.T) {
 		}
 	})
 }
+
+func TestPlayAttacktOperationsImpl(t *testing.T) {
+	t.Run("GIVEN two Players, a hand and the oponent's hand, return the modified oponent's hand", func(t *testing.T) {
+		//Arange
+		//Act
+		//Assert
+	})
+
+}

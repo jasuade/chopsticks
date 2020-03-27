@@ -21,6 +21,7 @@ var PlayerStates = map[string]string{
 	"02": "11",
 	"03": "12",
 	"04": "22",
+	//"04": "13",
 }
 
 //GetPlayer function restuns the Current implementation of the Player
@@ -36,6 +37,7 @@ func (psi *PlayerStateMachineImpl) playSplit() {
 	state := strconv.Itoa(player.LeftHand) + strconv.Itoa(player.RightHand)
 	if value, ok := PlayerStates[state]; ok {
 		tmp := strings.Split(value, "")
+
 		player.LeftHand, _ = strconv.Atoi(tmp[0])
 		player.RightHand, _ = strconv.Atoi(tmp[1])
 		return
