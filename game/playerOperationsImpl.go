@@ -6,11 +6,11 @@ import (
 )
 
 type PlayerOperationsImpl struct {
-	player *Player
+	Player *Player
 }
 
 func (poi *PlayerOperationsImpl) GetPlayer() *Player {
-	return poi.player
+	return poi.Player
 }
 
 func (poi *PlayerOperationsImpl) playAttack() {
@@ -18,7 +18,7 @@ func (poi *PlayerOperationsImpl) playAttack() {
 
 //Should receive a player with an status and return the same player with different status
 func (poi *PlayerOperationsImpl) playSplit() {
-	player := poi.player
+	player := poi.Player
 	if player.LeftHand <= 1 && player.RightHand <= 1 {
 		fmt.Println("Unable to slpit, not enough chopsticks, you cannot kill a hand")
 		return
