@@ -9,11 +9,11 @@ import (
 )
 
 //PlayTurn execute the action of a player in a given moment, it uses the stdio to read from the console
-func PlayTurn(players []Player, playerTurn int, actions playerActions) string {
-	return playTurnFromReader(players, playerTurn, os.Stdin, actions)
+func PlayTurn(players []PlayerI, playerTurn int) string {
+	return playTurnFromReader(players, playerTurn, os.Stdin)
 }
 
-func playTurnFromReader(players []Player, playerTurn int, r io.Reader, actions playerActions) string {
+func playTurnFromReader(players []PlayerI, playerTurn int, r io.Reader) string {
 	reader := bufio.NewReader(r)
 
 	fmt.Print("Are you goint to attack(a) or to split(s):\n")
@@ -26,7 +26,7 @@ func playTurnFromReader(players []Player, playerTurn int, r io.Reader, actions p
 	case "s":
 		fmt.Println("You choose to split")
 		action = "split"
-		actions.playSplit(&players[playerTurn])
+		players[playerTurn].playSplit()
 	default:
 		action = "Invalid action"
 		fmt.Println(action)

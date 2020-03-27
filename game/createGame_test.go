@@ -11,7 +11,8 @@ func TestCreateGame(t *testing.T) {
 	t.Run("When call createGame should return 2 players with 1 finger each", func(t *testing.T) {
 		config := &config.Configuration{2, "easy", "cutoff"}
 		got := CreateGame(config)
-		want := []Player{Player{1, 1}, Player{1, 1}}
+		player := &PlayerOperationsImpl{&Player{1, 1}}
+		want := []PlayerI{player, player}
 		if !reflect.DeepEqual(want, got) {
 			t.Errorf("Error: got %v but wanted %v\n", got, want)
 		}

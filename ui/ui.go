@@ -12,8 +12,9 @@ const EMOJI_WIN_GAME string = "🏆"
 const EMOJI_LOST_HAND string = "💢"
 const EMOJI_LOST_GAME string = "💩"
 
-func DisplayStatus(players []game.Player) error {
-	for i, player := range players {
+func DisplayStatus(players []game.PlayerI) error {
+	for i, playerI := range players {
+		player := playerI.GetPlayer()
 		fmt.Printf("P%d", i)
 		if player.LeftHand == 5 {
 			fmt.Print(" [  " + EMOJI_LOST_HAND + "  ] ")

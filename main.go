@@ -18,8 +18,7 @@ func main() {
 		log.Fatal(err)
 	}
 	//Set the game
-	players := make([]game.Player, config.Players)
-	players = game.CreateGame(config)
+	players := game.CreateGame(config)
 
 	//Start the game
 	fmt.Printf("Start the game with %d payers in mode <%s> and level <%s> \n", config.Players, config.Mode, config.Difficulty)

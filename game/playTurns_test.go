@@ -19,7 +19,9 @@ func TestPlayTurns(t *testing.T) {
 			{desc: "Selected the any other letter or num we should recieve 'Invalid action'", input: "3", want: "Invalid action"},
 			{desc: "Selected the any other letter or num we should recieve 'Invalid action'", input: "sd", want: "Invalid action"},
 		}
-		players := []Player{Player{1, 1}, Player{1, 1}}
+
+		player := &PlayerOperationsImpl{&Player{1, 1}}
+		players := []PlayerI{player, player}
 
 		for _, tcase := range testCase {
 			tcase := tcase
@@ -41,7 +43,7 @@ func TestPlayTurns(t *testing.T) {
 			inputPlayer  *Player
 			wantedPlayer *Player
 		}{
-			{desc: "Test if both are less than or equal 1", inputPlayer: &Player{0, 1}, wantedPlayer: &Player{0, 1}},
+			{desc: "Test if both are less than or equal 1", inputPlayer: &Player{1, 1}, wantedPlayer: &Player{1, 1}},
 			{desc: "Test if player input {4,3} output should be {4,3}", inputPlayer: &Player{4, 3}, wantedPlayer: &Player{4, 3}},
 			{desc: "Test if player input {1,2} output should be {2,1}", inputPlayer: &Player{1, 2}, wantedPlayer: &Player{1, 2}},
 			{desc: "Test if both are 4", inputPlayer: &Player{4, 4}, wantedPlayer: &Player{4, 4}},
@@ -59,7 +61,8 @@ func TestPlayTurns(t *testing.T) {
 			//Act
 			t.Run(tcase.desc, func(t *testing.T) {
 				t.Parallel()
-				tcase.inputPlayer.playSplit()
+				playerOperationsImpl := &PlayerOperationsImpl{tcase.inputPlayer}
+				playerOperationsImpl.playSplit()
 				//Asset
 				if !reflect.DeepEqual(tcase.inputPlayer, tcase.wantedPlayer) {
 					t.Errorf("Error: got %v but wanted %v\n", tcase.inputPlayer, tcase.wantedPlayer)
