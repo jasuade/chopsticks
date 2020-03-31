@@ -17,7 +17,7 @@ type Player struct {
 type PlayerI interface {
 	GetPlayer() *Player
 	playSplit()
-	playAttack()
+	playAttack(*Player, int, string)
 }
 
 //CreateGame initialize the Number of players defined in the configutarion to the initial state

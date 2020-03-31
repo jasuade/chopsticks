@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"math"
+	"strings"
 )
 
 //PlayerOperationsImpl is the current implementation of the interface PlayerI, implementation done with math operations
@@ -19,22 +20,34 @@ func (poi *PlayerOperationsImpl) GetPlayer() *Player {
 
 //Should receive all players with its status, execute attack from a player and return the new status
 func chooseAttack(players []PlayerI, playerTurn int, r io.Reader) {
+	atackingPlayer := players[playerTurn].GetPlayer()
+	defendingPlayer := players[(playerTurn+1)%2].GetPlayer() // TODO: Modify for multiple players
+	// TODO: Modify for multiple players
+	// if len(players) > 2 {
+	// 	fmt.Printf("Which player %v do you want to attack:\n", players)
+	// }
 	reader := bufio.NewReader(r)
-	if len(players) < 2 {
-		fmt.Printf("Which player %v do you want to attack:\n", players)
-	}
-	fmt.Printf("And which hand (left(l) or right(r))do you want to attack:\n")
-	action, _ := reader.ReadString('\n')
-	fmt.Println(action)
-	//action = strings.TrimSpace(action)
+	fmt.Printf("With which hand (left(l) or right(r))do you want to attack:\n")
+	attackerhand, _ := reader.ReadString('\n')
 
-	//TODO: chose the enemy and the hand's enemy to be attacked
-	//TODO: execute the attack
+	fmt.Printf("And which hand (left(l) or right(r))do you want to attack:\n")
+
+	receiverHand, _ := reader.ReadString('\n')
+	switch strings.TrimSpace(attackerhand) {
+	case "l":
+		players[playerTurn].playAttack(defendingPlayer, atackingPlayer.LeftHand, receiverHand)
+	case "r":
+		players[playerTurn].playAttack(defendingPlayer, atackingPlayer.RightHand, receiverHand)
+	}
 }
 
-//
-func (poi *PlayerOperationsImpl) playAttack() {
-
+func (poi *PlayerOperationsImpl) playAttack(defendingPlayer *Player, num int, receiverHand string) {
+	switch strings.TrimSpace(receiverHand) {
+	case "l":
+		defendingPlayer.LeftHand += num
+	case "r":
+		defendingPlayer.RightHand += num
+	}
 }
 
 //Should receive a player with an status and return the same player with different status
