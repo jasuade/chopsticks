@@ -2,6 +2,7 @@ package game
 
 import (
 	"reflect"
+	"strings"
 	"testing"
 )
 
@@ -90,10 +91,44 @@ func TestPlaySplitOperationsImpl(t *testing.T) {
 }
 
 func TestPlayAttacktOperationsImpl(t *testing.T) {
-	t.Run("GIVEN two Players, a hand and the oponent's hand, return the modified oponent's hand", func(t *testing.T) {
-		//Arange
-		//Act
-		//Assert
+	t.Run("Test play Attack, given a player, the attacker hand and the oponent hand return a oponent player", func(t *testing.T) {
+		// chooseAttack(players []PlayerI, playerTurn int, r io.Reader)
+		// (poi *PlayerOperationsImpl) playAttack(defendingPlayer *Player, num int, receiverHand string) {
+		testCase := []struct {
+			desc                string
+			attackerPlayer      *Player
+			oponentPlayerInput  *Player
+			oponentPlayerOutput *Player
+			attackerHand        string
+			oponentHand         string
+		}{
+			{desc: "Given an attacker player{0,3} and a oponent{3,2}, an attack hand r, and a oponent hand r, return oponent{3,5}", attackerPlayer: &Player{0, 3}, oponentPlayerInput: &Player{3, 2},
+				attackerHand: "r", oponentHand: "r", oponentPlayerOutput: &Player{3, 5}},
+			{desc: "Given an attacker player{2,1} and a oponent{2,2}, an attack hand l, and a oponent hand r, return oponent{2, 4}", attackerPlayer: &Player{2, 1}, oponentPlayerInput: &Player{2, 2},
+				attackerHand: "l", oponentHand: "r", oponentPlayerOutput: &Player{2, 4}},
+			{desc: "Given an attacker player{0,3} and a oponent{3,2}, an attack hand l, and a oponent hand r, return the same oponent", attackerPlayer: &Player{0, 3}, oponentPlayerInput: &Player{3, 2},
+				attackerHand: "l", oponentHand: "r", oponentPlayerOutput: &Player{3, 2}},
+			{desc: "Given an attacker player{1,2} and a oponent{4,0}, an attack hand r, and a oponent hand r, return the same oponent", attackerPlayer: &Player{1, 2}, oponentPlayerInput: &Player{4, 0},
+				attackerHand: "r", oponentHand: "r", oponentPlayerOutput: &Player{4, 0}},
+		}
+		for _, tcase := range testCase {
+			tcase := tcase
+			t.Run(tcase.desc, func(t *testing.T) {
+				t.Parallel()
+
+				hands := strings.NewReader(tcase.attackerHand + "\n" + tcase.oponentHand + "\n")
+
+				p1 := &PlayerOperationsImpl{tcase.attackerPlayer}
+				p2 := &PlayerOperationsImpl{tcase.oponentPlayerInput}
+				players := []PlayerI{p1, p2}
+
+				turn := 0
+				chooseAttack(players, turn, hands)
+				if !reflect.DeepEqual(tcase.oponentPlayerInput, tcase.oponentPlayerOutput) {
+					t.Errorf("Error: got %v but wanted %v\n", tcase.oponentPlayerInput, tcase.oponentPlayerOutput)
+				}
+			})
+		}
 	})
 
 }

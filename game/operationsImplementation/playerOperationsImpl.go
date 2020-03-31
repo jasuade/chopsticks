@@ -21,33 +21,50 @@ func (poi *PlayerOperationsImpl) GetPlayer() *Player {
 //Should receive all players with its status, execute attack from a player and return the new status
 func chooseAttack(players []PlayerI, playerTurn int, r io.Reader) {
 	atackingPlayer := players[playerTurn].GetPlayer()
-	defendingPlayer := players[(playerTurn+1)%2].GetPlayer() // TODO: Modify for multiple players
+	oponentPlayer := players[(playerTurn+1)%2].GetPlayer() // TODO: Modify for multiple players
 	// TODO: Modify for multiple players
 	// if len(players) > 2 {
 	// 	fmt.Printf("Which player %v do you want to attack:\n", players)
 	// }
+
 	reader := bufio.NewReader(r)
 	fmt.Printf("With which hand (left(l) or right(r))do you want to attack:\n")
 	attackerhand, _ := reader.ReadString('\n')
 
 	fmt.Printf("And which hand (left(l) or right(r))do you want to attack:\n")
-
 	receiverHand, _ := reader.ReadString('\n')
+
 	switch strings.TrimSpace(attackerhand) {
 	case "l":
-		players[playerTurn].playAttack(defendingPlayer, atackingPlayer.LeftHand, receiverHand)
+		if atackingPlayer.LeftHand < 5 && atackingPlayer.LeftHand > 0 {
+			players[playerTurn].playAttack(oponentPlayer, atackingPlayer.LeftHand, receiverHand)
+			return
+		}
 	case "r":
-		players[playerTurn].playAttack(defendingPlayer, atackingPlayer.RightHand, receiverHand)
+		if atackingPlayer.RightHand < 5 && atackingPlayer.RightHand > 0 {
+			players[playerTurn].playAttack(oponentPlayer, atackingPlayer.RightHand, receiverHand)
+			return
+		}
 	}
+	fmt.Println("Invalid attack, the hand is not alive")
+	return
 }
 
-func (poi *PlayerOperationsImpl) playAttack(defendingPlayer *Player, num int, receiverHand string) {
+func (poi *PlayerOperationsImpl) playAttack(oponentPlayer *Player, num int, receiverHand string) {
 	switch strings.TrimSpace(receiverHand) {
 	case "l":
-		defendingPlayer.LeftHand += num
+		if oponentPlayer.LeftHand < 5 && 0 < oponentPlayer.LeftHand {
+			oponentPlayer.LeftHand += num
+			return
+		}
 	case "r":
-		defendingPlayer.RightHand += num
+		if oponentPlayer.RightHand < 5 && 0 < oponentPlayer.RightHand {
+			oponentPlayer.RightHand += num
+			return
+		}
 	}
+	fmt.Println("Invalid attack, the hand is not alive")
+	return
 }
 
 //Should receive a player with an status and return the same player with different status
