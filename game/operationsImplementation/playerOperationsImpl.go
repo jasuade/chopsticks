@@ -2,6 +2,7 @@ package game
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
 	"io"
 	"math"
@@ -19,7 +20,7 @@ func (poi *PlayerOperationsImpl) GetPlayer() *Player {
 }
 
 //Should receive all players with its status, execute attack from a player and return the new status
-func chooseAttack(players []PlayerI, playerTurn int, r io.Reader) {
+func chooseAttack(players []PlayerI, playerTurn int, r io.Reader) error {
 	atackingPlayer := players[playerTurn].GetPlayer()
 	oponentPlayer := players[(playerTurn+1)%2].GetPlayer() // TODO: Modify for multiple players
 	// TODO: Modify for multiple players
@@ -29,78 +30,87 @@ func chooseAttack(players []PlayerI, playerTurn int, r io.Reader) {
 
 	reader := bufio.NewReader(r)
 	fmt.Printf("With which hand (left(l) or right(r))do you want to attack:\n")
-	attackerhand, _ := reader.ReadString('\n')
+	attackerhand, err := reader.ReadString('\n')
+	if err != nil {
+		return err
+	}
 
 	fmt.Printf("And which hand (left(l) or right(r))do you want to attack:\n")
-	receiverHand, _ := reader.ReadString('\n')
+	receiverHand, err := reader.ReadString('\n')
+	if err != nil {
+		return err
+	}
 
 	switch strings.TrimSpace(attackerhand) {
 	case "l":
 		if atackingPlayer.LeftHand < 5 && atackingPlayer.LeftHand > 0 {
 			players[playerTurn].playAttack(oponentPlayer, atackingPlayer.LeftHand, receiverHand)
-			return
+			return nil
 		}
 	case "r":
 		if atackingPlayer.RightHand < 5 && atackingPlayer.RightHand > 0 {
 			players[playerTurn].playAttack(oponentPlayer, atackingPlayer.RightHand, receiverHand)
-			return
+			return nil
 		}
 	}
-	fmt.Println("Invalid attack, the hand is not alive")
-	return
+	err = errors.New("Invalid attack, the hand does not exists")
+	return err
 }
 
-func (poi *PlayerOperationsImpl) playAttack(oponentPlayer *Player, num int, receiverHand string) {
+func (poi *PlayerOperationsImpl) playAttack(oponentPlayer *Player, num int, receiverHand string) error {
 	switch strings.TrimSpace(receiverHand) {
 	case "l":
 		if oponentPlayer.LeftHand < 5 && 0 < oponentPlayer.LeftHand {
 			oponentPlayer.LeftHand += num
-			return
+			return nil
 		}
 		oponentPlayer.LeftHand = 0
 	case "r":
 		if oponentPlayer.RightHand < 5 && 0 < oponentPlayer.RightHand {
 			oponentPlayer.RightHand += num
-			return
+			return nil
 		}
 		oponentPlayer.RightHand = 0
 	}
-	fmt.Println("Invalid attack, the hand is not alive")
-	return
+
+	err := errors.New("Invalid attack, the hand is not alive")
+	return err
 }
 
 //Should receive a player with an status and return the same player with different status
-func (poi *PlayerOperationsImpl) playSplit() {
+func (poi *PlayerOperationsImpl) playSplit() error {
 	player := poi.Player
 	if player.LeftHand <= 1 && player.RightHand <= 1 {
-		fmt.Println("Unable to slpit, not enough chopsticks, you cannot kill a hand")
-		return
+		err := errors.New("Unable to slpit, not enough chopsticks, you cannot kill a hand")
+		return err
 	}
 	if player.LeftHand == 4 && player.RightHand == 4 {
-		fmt.Println("Unable to slpit, too many chopsticks, you cannot kill a hand")
-		return
+		err := errors.New("Unable to slpit, too many chopsticks, you cannot kill a hand")
+		return err
 	}
 	if containsNumber(player, 0) {
 		if containsNumber(player, 4) {
 			player.splitWithZeroFour(0)
-			return
+			return nil
 		}
 		player.higherToLower()
-		return
+		return nil
 	} else if int(math.Abs(float64(player.LeftHand-player.RightHand))) == 1 {
 		if containsNumber(player, 2) && containsNumber(player, 3) {
 			player.LeftHand = 1
 			player.RightHand = 4
-			return
+			return nil
 		}
-		fmt.Printf("That is not a meaninful split, as %v will be {%d,%d} \n", player, player.RightHand, player.LeftHand)
-		return
+		err := errors.New("That is not a meaninful split")
+		return err
+
 	} else if player.RightHand >= player.LeftHand {
 		player.higherToLower()
-		return
+		return nil
 	}
 	player.RightHand++
 	player.LeftHand--
+	return nil
 }
 
 //Receives a player and a number return true if the number is in the arra, false otherwise

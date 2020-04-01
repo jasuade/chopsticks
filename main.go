@@ -29,10 +29,15 @@ func main() {
 	//Turn loop
 	for eval.IsWin(players) {
 		fmt.Printf("Player %d is your turn\n", playerTurn)
-		game.PlayTurn(players, playerTurn)
-		game.CheckHandsStatus(players)
-		ui.DisplayStatus(players)
-		playerTurn = (playerTurn + 1) % 2
+		err = game.PlayTurn(players, playerTurn)
+		if err == nil {
+			game.CheckHandsStatus(players)
+			ui.DisplayStatus(players)
+			playerTurn = (playerTurn + 1) % 2
+		} else {
+			fmt.Println(err)
+		}
+
 	}
 
 }

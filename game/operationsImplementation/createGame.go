@@ -16,8 +16,8 @@ type Player struct {
 //PlayerI is the interface for the different implementations of the player and its actions
 type PlayerI interface {
 	GetPlayer() *Player
-	playSplit()
-	playAttack(*Player, int, string)
+	playSplit() error
+	playAttack(*Player, int, string) error
 }
 
 //CreateGame initialize the Number of players defined in the configutarion to the initial state
