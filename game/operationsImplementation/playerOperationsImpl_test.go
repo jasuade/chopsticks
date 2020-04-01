@@ -118,9 +118,9 @@ func TestPlayAttacktOperationsImpl(t *testing.T) {
 
 				hands := strings.NewReader(tcase.attackerHand + "\n" + tcase.oponentHand + "\n")
 
-				p1 := &PlayerOperationsImpl{tcase.attackerPlayer}
-				p2 := &PlayerOperationsImpl{tcase.oponentPlayerInput}
-				players := []PlayerI{p1, p2}
+				p0 := &PlayerOperationsImpl{tcase.attackerPlayer}
+				p1 := &PlayerOperationsImpl{tcase.oponentPlayerInput}
+				players := []PlayerI{p0, p1}
 
 				turn := 0
 				chooseAttack(players, turn, hands)

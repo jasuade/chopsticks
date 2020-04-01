@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.hc.ag/jsuarez/chopsticks/config"
+	eval "github.hc.ag/jsuarez/chopsticks/game"
 	game "github.hc.ag/jsuarez/chopsticks/game/operationsImplementation"
 	ui "github.hc.ag/jsuarez/chopsticks/ui"
 )
@@ -24,10 +25,13 @@ func main() {
 	fmt.Printf("Start the game with %d payers in mode <%s> and level <%s> \n", config.Players, config.Mode, config.Difficulty)
 	playerTurn := game.StartGame(config)
 	ui.DisplayStatus(players)
-	fmt.Printf("Player %d is your turn\n", playerTurn)
-	game.PlayTurn(players, playerTurn)
-	ui.DisplayStatus(players)
 
-	//Check status
+	//Turn loop
+	for eval.IsWin(players) {
+		fmt.Printf("Player %d is your turn\n", playerTurn)
+		game.PlayTurn(players, playerTurn)
+		ui.DisplayStatus(players)
+		playerTurn = (playerTurn + 1) % 2
+	}
 
 }

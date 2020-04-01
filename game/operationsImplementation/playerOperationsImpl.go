@@ -57,11 +57,13 @@ func (poi *PlayerOperationsImpl) playAttack(oponentPlayer *Player, num int, rece
 			oponentPlayer.LeftHand += num
 			return
 		}
+		oponentPlayer.LeftHand = 0
 	case "r":
 		if oponentPlayer.RightHand < 5 && 0 < oponentPlayer.RightHand {
 			oponentPlayer.RightHand += num
 			return
 		}
+		oponentPlayer.RightHand = 0
 	}
 	fmt.Println("Invalid attack, the hand is not alive")
 	return

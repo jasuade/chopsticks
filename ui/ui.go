@@ -24,7 +24,7 @@ func DisplayStatus(players []game.PlayerI) error {
 	for i, playerI := range players {
 		player := playerI.GetPlayer()
 		fmt.Printf("P%d", i)
-		if player.LeftHand == 5 {
+		if player.LeftHand >= 5 || player.LeftHand == 0 {
 			fmt.Print(" [  " + EMOJI_LOST_HAND + "  ] ")
 		} else {
 			fmt.Print(" [")
@@ -34,7 +34,7 @@ func DisplayStatus(players []game.PlayerI) error {
 			fmt.Print("] ")
 		}
 
-		if player.RightHand == 5 {
+		if player.RightHand >= 5 || player.RightHand == 0 {
 			fmt.Print(" [  " + EMOJI_LOST_HAND + "  ] ")
 		} else {
 			fmt.Print(" [")
