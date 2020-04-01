@@ -43,12 +43,12 @@ func chooseAttack(players []PlayerI, playerTurn int, r io.Reader) error {
 
 	switch strings.TrimSpace(attackerhand) {
 	case "l":
-		if atackingPlayer.LeftHand < 5 && atackingPlayer.LeftHand > 0 {
+		if atackingPlayer.LeftHand < 5 && atackingPlayer.LeftHand >= 0 {
 			players[playerTurn].playAttack(oponentPlayer, atackingPlayer.LeftHand, receiverHand)
 			return nil
 		}
 	case "r":
-		if atackingPlayer.RightHand < 5 && atackingPlayer.RightHand > 0 {
+		if atackingPlayer.RightHand < 5 && atackingPlayer.RightHand >= 0 {
 			players[playerTurn].playAttack(oponentPlayer, atackingPlayer.RightHand, receiverHand)
 			return nil
 		}
@@ -60,13 +60,13 @@ func chooseAttack(players []PlayerI, playerTurn int, r io.Reader) error {
 func (poi *PlayerOperationsImpl) playAttack(oponentPlayer *Player, num int, receiverHand string) error {
 	switch strings.TrimSpace(receiverHand) {
 	case "l":
-		if oponentPlayer.LeftHand < 5 && 0 < oponentPlayer.LeftHand {
+		if oponentPlayer.LeftHand < 5 && 0 <= oponentPlayer.LeftHand {
 			oponentPlayer.LeftHand += num
 			return nil
 		}
 		oponentPlayer.LeftHand = 0
 	case "r":
-		if oponentPlayer.RightHand < 5 && 0 < oponentPlayer.RightHand {
+		if oponentPlayer.RightHand < 5 && 0 <= oponentPlayer.RightHand {
 			oponentPlayer.RightHand += num
 			return nil
 		}
