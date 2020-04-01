@@ -135,3 +135,17 @@ func (player *Player) splitWithZeroFour(num int) {
 	return
 
 }
+
+//CheckHandsStatus is used in Cut-off mode yo equals hands with value >= 5 to value 0
+func CheckHandsStatus(players []PlayerI) {
+	for _, player := range players {
+		if player.GetPlayer().RightHand >= 5 {
+			player.GetPlayer().RightHand = 0
+		}
+
+		if player.GetPlayer().LeftHand >= 5 {
+			player.GetPlayer().LeftHand = 0
+		}
+	}
+
+}

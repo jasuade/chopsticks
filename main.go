@@ -30,6 +30,7 @@ func main() {
 	for eval.IsWin(players) {
 		fmt.Printf("Player %d is your turn\n", playerTurn)
 		game.PlayTurn(players, playerTurn)
+		game.CheckHandsStatus(players)
 		ui.DisplayStatus(players)
 		playerTurn = (playerTurn + 1) % 2
 	}
