@@ -13,25 +13,25 @@ import (
 const DEFAULT_GAME_CONFIGURATION_PATH = "game.config"
 
 func main() {
-	//Test SDL UI
-	err := ui.InitSDL()
-	if err != nil {
-		log.Fatal(err)
-	}
-	return
 
 	//Read configuration file
 	config, err := config.OpenConfig(DEFAULT_GAME_CONFIGURATION_PATH)
 	if err != nil {
 		log.Fatal(err)
 	}
-	//Set the game
+
 	players := game.CreateGame(config)
 
 	//Start the game
 	fmt.Printf("Start the game with %d payers in mode <%s> and level <%s> \n", config.Players, config.Mode, config.Difficulty)
 	playerTurn := game.StartGame(config)
-	ui.DisplayStatus(players)
+
+	//ui.DisplayStatus(players)
+	//SDL UI
+	err = ui.InitSDL(players)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	//Turn loop
 	for eval.IsWin(players) {
@@ -48,3 +48,14 @@ func main() {
 	}
 
 }
+
+// func gameLoop(players []game.PlayerI, resources *ui.Resources, r *sdl.Renderer, w *sdl.Window) error {
+// 	for {
+// 		for event := sdl.PollEvent(); event != nil; event = sdl.PollEvent() {
+// 			switch event.(type) {
+// 			case *sdl.QuitEvent:
+// 				return nil
+// 			}
+// 		}
+// 	}
+// }
