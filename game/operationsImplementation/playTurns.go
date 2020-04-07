@@ -25,7 +25,7 @@ func playTurnFromReader(players []PlayerI, playerTurn int, r io.Reader) error {
 	switch strings.TrimSpace(action) {
 	case "a":
 		fmt.Println("You choose to attack")
-		err = chooseAttack(players, playerTurn, os.Stdin)
+		err = chooseAttack(players, playerTurn, r)
 	case "s":
 		fmt.Println("You choose to split")
 		err = players[playerTurn].playSplit()

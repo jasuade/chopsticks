@@ -40,17 +40,16 @@ func chooseAttack(players []PlayerI, playerTurn int, r io.Reader) error {
 	if err != nil {
 		return err
 	}
-
 	switch strings.TrimSpace(attackerhand) {
 	case "l":
-		if atackingPlayer.LeftHand < 5 && atackingPlayer.LeftHand >= 0 {
-			players[playerTurn].playAttack(oponentPlayer, atackingPlayer.LeftHand, receiverHand)
-			return nil
+		if atackingPlayer.LeftHand < 5 && atackingPlayer.LeftHand > 0 {
+			err = players[playerTurn].playAttack(oponentPlayer, atackingPlayer.LeftHand, receiverHand)
+			return err
 		}
 	case "r":
-		if atackingPlayer.RightHand < 5 && atackingPlayer.RightHand >= 0 {
-			players[playerTurn].playAttack(oponentPlayer, atackingPlayer.RightHand, receiverHand)
-			return nil
+		if atackingPlayer.RightHand < 5 && atackingPlayer.RightHand > 0 {
+			err = players[playerTurn].playAttack(oponentPlayer, atackingPlayer.RightHand, receiverHand)
+			return err
 		}
 	}
 	err = errors.New("Invalid attack, the hand does not exists")
@@ -60,13 +59,13 @@ func chooseAttack(players []PlayerI, playerTurn int, r io.Reader) error {
 func (poi *PlayerOperationsImpl) playAttack(oponentPlayer *Player, num int, receiverHand string) error {
 	switch strings.TrimSpace(receiverHand) {
 	case "l":
-		if oponentPlayer.LeftHand < 5 && 0 <= oponentPlayer.LeftHand {
+		if oponentPlayer.LeftHand < 5 && oponentPlayer.LeftHand > 0 {
 			oponentPlayer.LeftHand += num
 			return nil
 		}
 		oponentPlayer.LeftHand = 0
 	case "r":
-		if oponentPlayer.RightHand < 5 && 0 <= oponentPlayer.RightHand {
+		if oponentPlayer.RightHand < 5 && oponentPlayer.RightHand > 0 {
 			oponentPlayer.RightHand += num
 			return nil
 		}
@@ -77,7 +76,6 @@ func (poi *PlayerOperationsImpl) playAttack(oponentPlayer *Player, num int, rece
 	return err
 }
 
-//Should receive a player with an status and return the same player with different status
 func (poi *PlayerOperationsImpl) playSplit() error {
 	player := poi.Player
 	if player.LeftHand <= 1 && player.RightHand <= 1 {
@@ -113,7 +111,6 @@ func (poi *PlayerOperationsImpl) playSplit() error {
 	return nil
 }
 
-//Receives a player and a number return true if the number is in the arra, false otherwise
 func containsNumber(player *Player, i int) bool {
 	if player.LeftHand == i || player.RightHand == i {
 		return true
@@ -121,7 +118,6 @@ func containsNumber(player *Player, i int) bool {
 	return false
 }
 
-//Increase the value of the lower number in 1 and decreases the higher in 1
 func (player *Player) higherToLower() {
 	if player.RightHand >= player.LeftHand {
 		player.RightHand--
