@@ -13,6 +13,13 @@ import (
 const DEFAULT_GAME_CONFIGURATION_PATH = "game.config"
 
 func main() {
+	//Test SDL UI
+	err := ui.InitSDL()
+	if err != nil {
+		log.Fatal(err)
+	}
+	return
+
 	//Read configuration file
 	config, err := config.OpenConfig(DEFAULT_GAME_CONFIGURATION_PATH)
 	if err != nil {
