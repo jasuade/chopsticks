@@ -28,8 +28,15 @@ func main() {
 
 	//ui.DisplayStatus(players)
 	//SDL UI
-	err = ui.InitSDL(players)
+	w, r, resources, err := ui.InitSDL()
 	if err != nil {
+		log.Fatal(err)
+	}
+	if err := ui.PrintPlayers(players, r, resources); err != nil {
+		log.Fatal(err)
+	}
+
+	if err := ui.GameLoop(w, r); err != nil {
 		log.Fatal(err)
 	}
 

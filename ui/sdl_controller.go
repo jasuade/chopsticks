@@ -13,59 +13,59 @@ type Resources struct {
 	titleTexture      *sdl.Texture
 	handTextures      []*sdl.Texture
 	backgroundTexture *sdl.Texture
+	textTextures      []*sdl.Texture
 }
 
-func InitSDL(players []game.PlayerI) error {
+func InitSDL() (*sdl.Window, *sdl.Renderer, *Resources, error) {
 	w, r, err := createWinGame()
 	if err != nil {
-		return err
+		return nil, nil, nil, err
 	}
-	defer sdl.Quit()
-	defer ttf.Quit()
-	defer w.Destroy()
-	defer r.Destroy()
 
 	resources, err := loadResources(r)
 	if err != nil {
-		return err
+		return nil, nil, nil, err
 	}
 
-	r.SetDrawColor(206, 39, 39, 255)
 	r.Clear()
 
-	err = PrintBackground(r, resources)
+	err = printBackground(r, resources)
 	if err != nil {
-		return err
+		return nil, nil, nil, err
 	}
 
-	err = PrintTitle(r, resources)
+	err = printTitle(r, resources)
 	if err != nil {
-		return err
+		return nil, nil, nil, err
 	}
+	return w, r, resources, nil
+}
 
-	err = PrintPlayers(players, r, resources)
-	if err != nil {
-		return err
-	}
-
+func GameLoop(w *sdl.Window, r *sdl.Renderer) error {
 	r.Present()
-
 	for {
 		for event := sdl.PollEvent(); event != nil; event = sdl.PollEvent() {
 			switch event.(type) {
 			case *sdl.QuitEvent:
+				endGame(w, r)
 				return nil
 			}
 		}
 	}
-	return nil
+}
+
+func endGame(w *sdl.Window, r *sdl.Renderer) {
+	sdl.Quit()
+	ttf.Quit()
+	w.Destroy()
+	r.Destroy()
 }
 
 func createWinGame() (*sdl.Window, *sdl.Renderer, error) {
 	if err := sdl.Init(sdl.INIT_EVERYTHING); err != nil {
 		return nil, nil, err
 	}
-	//Init font
+
 	if err := ttf.Init(); err != nil {
 		return nil, nil, err
 	}
@@ -78,7 +78,7 @@ func createWinGame() (*sdl.Window, *sdl.Renderer, error) {
 	return w, r, err
 }
 
-func PrintBackground(r *sdl.Renderer, resources *Resources) error {
+func printBackground(r *sdl.Renderer, resources *Resources) error {
 	dstRect := &sdl.Rect{X: 0, Y: 0, W: 1000, H: 800}
 
 	if err := r.Copy(resources.backgroundTexture, nil, dstRect); err != nil {
@@ -87,7 +87,7 @@ func PrintBackground(r *sdl.Renderer, resources *Resources) error {
 	return nil
 }
 
-func PrintTitle(r *sdl.Renderer, resources *Resources) error {
+func printTitle(r *sdl.Renderer, resources *Resources) error {
 	dstRect := &sdl.Rect{X: 100, Y: 5, W: 800, H: 100}
 
 	if err := r.Copy(resources.titleTexture, nil, dstRect); err != nil {
