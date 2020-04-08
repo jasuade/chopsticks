@@ -48,14 +48,3 @@ func main() {
 	}
 
 }
-
-// func gameLoop(players []game.PlayerI, resources *ui.Resources, r *sdl.Renderer, w *sdl.Window) error {
-// 	for {
-// 		for event := sdl.PollEvent(); event != nil; event = sdl.PollEvent() {
-// 			switch event.(type) {
-// 			case *sdl.QuitEvent:
-// 				return nil
-// 			}
-// 		}
-// 	}
-// }

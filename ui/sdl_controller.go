@@ -1,6 +1,8 @@
 package ui
 
 import (
+	"fmt"
+
 	"github.com/veandco/go-sdl2/img"
 	"github.com/veandco/go-sdl2/sdl"
 	"github.com/veandco/go-sdl2/ttf"
@@ -8,12 +10,9 @@ import (
 )
 
 type Resources struct {
-	titleTexture        *sdl.Texture
-	onefingerTexture    *sdl.Texture
-	twofingersTexture   *sdl.Texture
-	threefingersTexture *sdl.Texture
-	fourfingersTexture  *sdl.Texture
-	fistTexture         *sdl.Texture
+	titleTexture      *sdl.Texture
+	handTextures      []*sdl.Texture
+	backgroundTexture *sdl.Texture
 }
 
 func InitSDL(players []game.PlayerI) error {
@@ -30,16 +29,21 @@ func InitSDL(players []game.PlayerI) error {
 	if err != nil {
 		return err
 	}
-	//Draw
+
 	r.SetDrawColor(206, 39, 39, 255)
 	r.Clear()
+
+	err = PrintBackground(r, resources)
+	if err != nil {
+		return err
+	}
 
 	err = PrintTitle(r, resources)
 	if err != nil {
 		return err
 	}
 
-	err = printPlayers(players, r, resources)
+	err = PrintPlayers(players, r, resources)
 	if err != nil {
 		return err
 	}
@@ -54,7 +58,6 @@ func InitSDL(players []game.PlayerI) error {
 			}
 		}
 	}
-
 	return nil
 }
 
@@ -75,6 +78,15 @@ func createWinGame() (*sdl.Window, *sdl.Renderer, error) {
 	return w, r, err
 }
 
+func PrintBackground(r *sdl.Renderer, resources *Resources) error {
+	dstRect := &sdl.Rect{X: 0, Y: 0, W: 1000, H: 800}
+
+	if err := r.Copy(resources.backgroundTexture, nil, dstRect); err != nil {
+		return err
+	}
+	return nil
+}
+
 func PrintTitle(r *sdl.Renderer, resources *Resources) error {
 	dstRect := &sdl.Rect{X: 100, Y: 5, W: 800, H: 100}
 
@@ -84,51 +96,33 @@ func PrintTitle(r *sdl.Renderer, resources *Resources) error {
 	return nil
 }
 
-func printPlayers(players []game.PlayerI, r *sdl.Renderer, resources *Resources) error {
-	var positionX int32 = 0
-	var texture *sdl.Texture
+func PrintPlayers(players []game.PlayerI, r *sdl.Renderer, resources *Resources) error {
+	var positionX int32 = 100
+	var positionY int32 = 800 - 300
+	var angle float64 = 0
 
 	for _, player := range players {
 		//TODO take the logic out of here and call a function just to print hands in the correct position
-		hand := player.GetPlayer().LeftHand
-		switch hand {
-		case 1:
-			{
-				texture = resources.onefingerTexture
-			}
-		case 2:
-			{
-				texture = resources.twofingersTexture
-			}
-		case 3:
-			{
-				texture = resources.threefingersTexture
-			}
-		case 4:
-			{
-				texture = resources.fourfingersTexture
-			}
-		default:
-			{
-				texture = resources.fistTexture
-			}
+		leftHand := player.GetPlayer().LeftHand
+		rightHand := player.GetPlayer().RightHand
+		textureLeftHand := resources.handTextures[leftHand]
+		textureRightHand := resources.handTextures[rightHand]
 
-		}
-
-		//Create one src and dst rect
 		srcRect := &sdl.Rect{X: 0, Y: 0, W: 512, H: 512}
-		dstRect := &sdl.Rect{positionX + 100, 800 - 300, 370, 300}
-		positionX += 400
-		if err := r.Copy(texture, srcRect, dstRect); err != nil {
+		dstRect := &sdl.Rect{X: positionX, Y: positionY, W: 370, H: 300}
+		if err := r.CopyEx(textureLeftHand, srcRect, dstRect, angle, nil, 0); err != nil {
 			return err
 		}
+
+		srcRect = &sdl.Rect{X: 0, Y: 0, W: 512, H: 512}
+		dstRect = &sdl.Rect{X: positionX + 400, Y: positionY, W: 370, H: 300}
+		// CopyEx(texture *Texture, src, dst *Rect, angle float64, center *Point, flip RendererFlip) error
+		if err := r.CopyEx(textureRightHand, srcRect, dstRect, angle, nil, 5); err != nil {
+			return err
+		}
+		angle += 180
+		positionY -= 400
 	}
-	//Create another src and dst rect
-	// srcRect2 := &sdl.Rect{X: 0, Y: 0, W: 512, H: 512}
-	// dstRect2 := &sdl.Rect{500, 800 - 300, 370, 300}
-	// if err := r.Copy(texture, srcRect2, dstRect2); err != nil {
-	// 	return err
-	// }
 	return nil
 }
 
@@ -140,25 +134,28 @@ func loadResources(r *sdl.Renderer) (*Resources, error) {
 	if err := loadFontTextures(resources, r); err != nil {
 		return nil, err
 	}
+	if err := loadBackground(resources, r); err != nil {
+		return nil, err
+	}
 	return resources, nil
 }
 
-func loadImageTextures(resources *Resources, r *sdl.Renderer) error {
+func loadBackground(resources *Resources, r *sdl.Renderer) error {
 	var err error
-	if resources.onefingerTexture, err = loadPNG("ui/img/onefinger.png", r); err != nil {
+	if resources.backgroundTexture, err = loadPNG("ui/img/background.png", r); err != nil {
 		return err
 	}
-	if resources.twofingersTexture, err = loadPNG("ui/img/twofingers.png", r); err != nil {
-		return err
-	}
-	if resources.threefingersTexture, err = loadPNG("ui/img/threefingers.png", r); err != nil {
-		return err
-	}
-	if resources.fourfingersTexture, err = loadPNG("ui/img/fourfingers.png", r); err != nil {
-		return err
-	}
-	if resources.fistTexture, err = loadPNG("ui/img/fist.png", r); err != nil {
-		return err
+	return nil
+}
+
+func loadImageTextures(resources *Resources, r *sdl.Renderer) error {
+	for i := 0; i < 5; i++ {
+		path := fmt.Sprintf("ui/img/%d_finger.png", i)
+		texture, err := loadPNG(path, r)
+		if err != nil {
+			return err
+		}
+		resources.handTextures = append(resources.handTextures, texture)
 	}
 	return nil
 }
