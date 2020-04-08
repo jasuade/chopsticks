@@ -2,7 +2,7 @@ package config
 
 import (
 	"bufio"
-	"fmt"
+	"log"
 	"os"
 	"strconv"
 	"strings"
@@ -22,7 +22,7 @@ func OpenConfig(path string) (*Configuration, error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println("Reading configuration file . . .")
+	log.Println("Reading configuration file . . .")
 	return ReadConfig(file), nil
 }
 

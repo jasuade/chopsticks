@@ -13,7 +13,31 @@ type Resources struct {
 	titleTexture      *sdl.Texture
 	handTextures      []*sdl.Texture
 	backgroundTexture *sdl.Texture
-	textTextures      []*sdl.Texture
+	messageTextures   MessageTexture
+}
+
+type MessagesPrinter interface {
+	printMessage(r *sdl.Renderer, resources *Resources, textId string) error
+}
+
+type MessageTexture map[string]*sdl.Texture
+
+var Messages = []struct {
+	id   string
+	text string
+}{
+	{id: "MSG_START", text: "Start the game with %d payers in mode <%s> and level <%s>"},
+	{id: "MSG_TURN", text: "Player %d is your turn"},
+	{id: "MSG_HAND_TO_ATTACK", text: "With which hand (left(l) or right(r))do you want to attack:"},
+	{id: "MSG_HAND_TO_ATTACK_WITH", text: "And which hand (left(l) or right(r))do you want to attack:"},
+	{id: "MSG_SPLIT", text: "How many chopsticks you want to transfere?"},
+	{id: "MSG_ACTION", text: "Are you goint to attack(a) or to split(s):"},
+	{id: "MSG_WIN", text: "Player P%d WINS the game"},
+	{id: "MSG_LOSE", text: "Player Px LOSES the game"},
+	{id: "ERR_INVALID_ATTACK", text: "Invalid attack, the hand does not exist"},
+	{id: "ERR_SPLIT_HAND", text: "Unable to slpit, you cannot kill a hand"},
+	{id: "ERR_SPLIT", text: "That is not a meaninful split"},
+	{id: "ERR_ACTION", text: "Invalid action: please introduce a valid action"},
 }
 
 func InitSDL() (*sdl.Window, *sdl.Renderer, *Resources, error) {
@@ -35,6 +59,12 @@ func InitSDL() (*sdl.Window, *sdl.Renderer, *Resources, error) {
 	}
 
 	err = printTitle(r, resources)
+	if err != nil {
+		return nil, nil, nil, err
+	}
+
+	i := &MessageTexture{}
+	err = i.printMessage(r, resources, "ERR_SPLIT")
 	if err != nil {
 		return nil, nil, nil, err
 	}
@@ -96,6 +126,15 @@ func printTitle(r *sdl.Renderer, resources *Resources) error {
 	return nil
 }
 
+func (m *MessageTexture) printMessage(r *sdl.Renderer, resources *Resources, textId string) error {
+	dstRect := &sdl.Rect{X: (1000 - 700) / 2, Y: 430, W: 700, H: 30}
+
+	if err := r.Copy(resources.messageTextures[textId], nil, dstRect); err != nil {
+		return err
+	}
+	return nil
+}
+
 func PrintPlayers(players []game.PlayerI, r *sdl.Renderer, resources *Resources) error {
 	var positionX int32 = 100
 	var positionY int32 = 800 - 300
@@ -134,10 +173,40 @@ func loadResources(r *sdl.Renderer) (*Resources, error) {
 	if err := loadFontTextures(resources, r); err != nil {
 		return nil, err
 	}
+	if err := loadTextsTextures(resources, r); err != nil {
+		return nil, err
+	}
 	if err := loadBackground(resources, r); err != nil {
 		return nil, err
 	}
 	return resources, nil
+}
+
+func loadTextsTextures(resources *Resources, r *sdl.Renderer) error {
+	resources.messageTextures = make(map[string]*sdl.Texture)
+	font, err := ttf.OpenFont("ui/font/pixeboy.ttf", 10)
+	if err != nil {
+		return err
+	}
+	defer font.Close()
+	for i := 0; i < len(Messages); i++ {
+		s, err := font.RenderUTF8Solid(Messages[i].text, sdl.Color{
+			R: 255,
+			G: 255,
+			B: 255,
+			A: 255,
+		})
+		if err != nil {
+			return err
+		}
+		defer s.Free()
+		texture, err := r.CreateTextureFromSurface(s)
+		if err != nil {
+			return err
+		}
+		resources.messageTextures[Messages[i].id] = texture
+	}
+	return nil
 }
 
 func loadBackground(resources *Resources, r *sdl.Renderer) error {
