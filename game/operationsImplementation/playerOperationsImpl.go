@@ -60,6 +60,13 @@ func (poi *PlayerOperationsImpl) PlayAttack(oponentPlayer *Player, num int, rece
 	switch strings.TrimSpace(receiverHand) {
 	case "l":
 		{
+<<<<<<< HEAD
+=======
+			if oponentPlayer.LeftHand == 0 {
+				err := errors.New("")
+				return err
+			}
+>>>>>>> ui
 			oponentPlayer.LeftHand += num
 			if oponentPlayer.LeftHand >= 5 {
 				oponentPlayer.LeftHand = 0
@@ -69,6 +76,13 @@ func (poi *PlayerOperationsImpl) PlayAttack(oponentPlayer *Player, num int, rece
 		}
 	case "r":
 		{
+<<<<<<< HEAD
+=======
+			if oponentPlayer.RightHand == 0 {
+				err := errors.New("")
+				return err
+			}
+>>>>>>> ui
 			oponentPlayer.RightHand += num
 			if oponentPlayer.RightHand >= 5 {
 				oponentPlayer.RightHand = 0
@@ -90,6 +104,13 @@ func (poi *PlayerOperationsImpl) PlaySplit() error {
 		return err
 	}
 	if ContainsNumber(player, 0) {
+<<<<<<< HEAD
+=======
+		// if ContainsNumber(player, 4) {
+		// 	player.SplitWithZeroFour(0)
+		// 	return nil
+		// }
+>>>>>>> ui
 		player.HigherToLower()
 		return nil
 	} else if int(math.Abs(float64(player.LeftHand-player.RightHand))) == 1 {
@@ -128,6 +149,22 @@ func (player *Player) HigherToLower() {
 	return
 }
 
+<<<<<<< HEAD
+=======
+// func (player *Player) SplitWithZeroFour(num int) {
+// 	fmt.Println("How many chopsticks you want to transfere?")
+// 	fmt.Scan(&num)
+// 	if num == 1 {
+// 		player.HigherToLower()
+// 		return
+// 	}
+// 	player.RightHand = 2
+// 	player.LeftHand = 2
+// 	return
+
+// }
+
+>>>>>>> ui
 //CheckHandsStatus is used in Cut-off mode yo equals hands with value >= 5 to value 0
 func CheckHandsStatus(players []PlayerI) {
 	for _, player := range players {
