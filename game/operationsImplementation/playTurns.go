@@ -3,8 +3,8 @@ package game
 import (
 	"bufio"
 	"errors"
-	"fmt"
 	"io"
+	"log"
 	"os"
 	"strings"
 )
@@ -17,7 +17,7 @@ func PlayTurn(players []PlayerI, playerTurn int) error {
 func playTurnFromReader(players []PlayerI, playerTurn int, r io.Reader) error {
 	reader := bufio.NewReader(r)
 
-	fmt.Print("Are you goint to attack(a) or to split(s):\n")
+	log.Print("Are you goint to attack(a) or to split(s):\n")
 	action, err := reader.ReadString('\n')
 	if err != nil {
 		return err
@@ -26,9 +26,9 @@ func playTurnFromReader(players []PlayerI, playerTurn int, r io.Reader) error {
 	case "a":
 		err = chooseAttack(players, playerTurn, r)
 	case "s":
-		err = players[playerTurn].playSplit()
+		err = players[playerTurn].PlaySplit()
 	default:
-		err := errors.New("Invalid action: please introduce a valid action")
+		err := errors.New("ERR_ACTION")
 		return err
 	}
 	return err

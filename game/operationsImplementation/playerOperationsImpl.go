@@ -3,8 +3,8 @@ package game
 import (
 	"bufio"
 	"errors"
-	"fmt"
 	"io"
+	"log"
 	"math"
 	"strings"
 )
@@ -29,13 +29,13 @@ func chooseAttack(players []PlayerI, playerTurn int, r io.Reader) error {
 	// }
 
 	reader := bufio.NewReader(r)
-	fmt.Printf("With which hand (left(l) or right(r))do you want to attack:\n")
+	log.Printf("With which hand (left(l) or right(r))do you want to attack:\n")
 	attackerhand, err := reader.ReadString('\n')
 	if err != nil {
 		return err
 	}
 
-	fmt.Printf("And which hand (left(l) or right(r))do you want to attack:\n")
+	log.Printf("And which hand (left(l) or right(r))do you want to attack:\n")
 	receiverHand, err := reader.ReadString('\n')
 	if err != nil {
 		return err
@@ -43,40 +43,43 @@ func chooseAttack(players []PlayerI, playerTurn int, r io.Reader) error {
 	switch strings.TrimSpace(attackerhand) {
 	case "l":
 		if atackingPlayer.LeftHand < 5 && atackingPlayer.LeftHand > 0 {
-			err = players[playerTurn].playAttack(oponentPlayer, atackingPlayer.LeftHand, receiverHand)
+			err = players[playerTurn].PlayAttack(oponentPlayer, atackingPlayer.LeftHand, receiverHand)
 			return err
 		}
 	case "r":
 		if atackingPlayer.RightHand < 5 && atackingPlayer.RightHand > 0 {
-			err = players[playerTurn].playAttack(oponentPlayer, atackingPlayer.RightHand, receiverHand)
+			err = players[playerTurn].PlayAttack(oponentPlayer, atackingPlayer.RightHand, receiverHand)
 			return err
 		}
 	}
-	err = errors.New("Invalid attack, the hand does not exists")
+	err = errors.New("")
 	return err
 }
 
-func (poi *PlayerOperationsImpl) playAttack(oponentPlayer *Player, num int, receiverHand string) error {
+func (poi *PlayerOperationsImpl) PlayAttack(oponentPlayer *Player, num int, receiverHand string) error {
 	switch strings.TrimSpace(receiverHand) {
 	case "l":
-		if oponentPlayer.LeftHand < 5 && oponentPlayer.LeftHand > 0 {
+		{
 			oponentPlayer.LeftHand += num
+			if oponentPlayer.LeftHand >= 5 {
+				oponentPlayer.LeftHand = 0
+			}
 			return nil
-		}
-		oponentPlayer.LeftHand = 0
-	case "r":
-		if oponentPlayer.RightHand < 5 && oponentPlayer.RightHand > 0 {
-			oponentPlayer.RightHand += num
-			return nil
-		}
-		oponentPlayer.RightHand = 0
-	}
 
-	err := errors.New("Invalid attack, the hand is not alive")
-	return err
+		}
+	case "r":
+		{
+			oponentPlayer.RightHand += num
+			if oponentPlayer.RightHand >= 5 {
+				oponentPlayer.RightHand = 0
+			}
+			return nil
+		}
+	}
+	return nil
 }
 
-func (poi *PlayerOperationsImpl) playSplit() error {
+func (poi *PlayerOperationsImpl) PlaySplit() error {
 	player := poi.Player
 	if player.LeftHand <= 1 && player.RightHand <= 1 {
 		err := errors.New("Unable to slpit, not enough chopsticks, you cannot kill a hand")
@@ -86,15 +89,11 @@ func (poi *PlayerOperationsImpl) playSplit() error {
 		err := errors.New("Unable to slpit, too many chopsticks, you cannot kill a hand")
 		return err
 	}
-	if containsNumber(player, 0) {
-		if containsNumber(player, 4) {
-			player.splitWithZeroFour(0)
-			return nil
-		}
-		player.higherToLower()
+	if ContainsNumber(player, 0) {
+		player.HigherToLower()
 		return nil
 	} else if int(math.Abs(float64(player.LeftHand-player.RightHand))) == 1 {
-		if containsNumber(player, 2) && containsNumber(player, 3) {
+		if ContainsNumber(player, 2) && ContainsNumber(player, 3) {
 			player.LeftHand = 1
 			player.RightHand = 4
 			return nil
@@ -103,7 +102,7 @@ func (poi *PlayerOperationsImpl) playSplit() error {
 		return err
 
 	} else if player.RightHand >= player.LeftHand {
-		player.higherToLower()
+		player.HigherToLower()
 		return nil
 	}
 	player.RightHand++
@@ -111,14 +110,14 @@ func (poi *PlayerOperationsImpl) playSplit() error {
 	return nil
 }
 
-func containsNumber(player *Player, i int) bool {
+func ContainsNumber(player *Player, i int) bool {
 	if player.LeftHand == i || player.RightHand == i {
 		return true
 	}
 	return false
 }
 
-func (player *Player) higherToLower() {
+func (player *Player) HigherToLower() {
 	if player.RightHand >= player.LeftHand {
 		player.RightHand--
 		player.LeftHand++
@@ -127,19 +126,6 @@ func (player *Player) higherToLower() {
 	player.RightHand++
 	player.LeftHand--
 	return
-}
-
-func (player *Player) splitWithZeroFour(num int) {
-	fmt.Println("How many chopsticks you want to transfere?")
-	fmt.Scan(&num)
-	if num == 1 {
-		player.higherToLower()
-		return
-	}
-	player.RightHand = 2
-	player.LeftHand = 2
-	return
-
 }
 
 //CheckHandsStatus is used in Cut-off mode yo equals hands with value >= 5 to value 0

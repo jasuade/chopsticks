@@ -32,7 +32,7 @@ func TestPlaySplitOperationsImpl(t *testing.T) {
 			t.Run(tcase.desc, func(t *testing.T) {
 				t.Parallel()
 				playerOperationsImpl := &PlayerOperationsImpl{tcase.inputPlayer}
-				playerOperationsImpl.playSplit()
+				playerOperationsImpl.PlaySplit()
 				//Asset
 				if !reflect.DeepEqual(tcase.inputPlayer, tcase.wantedPlayer) {
 					t.Errorf("Error: got %v but wanted %v\n", tcase.inputPlayer, tcase.wantedPlayer)
@@ -55,7 +55,7 @@ func TestPlaySplitOperationsImpl(t *testing.T) {
 			tcase := tcase
 			t.Run(tcase.desc, func(t *testing.T) {
 				t.Parallel()
-				got := containsNumber(tcase.inputPlayer, tcase.number)
+				got := ContainsNumber(tcase.inputPlayer, tcase.number)
 				if got != tcase.want {
 					t.Errorf("Error: got %v but wanted %v\n", tcase.inputPlayer, tcase.want)
 				}
@@ -63,31 +63,6 @@ func TestPlaySplitOperationsImpl(t *testing.T) {
 		}
 	})
 
-	t.Run("Test containsFourNumber, given a player{0,4} and input should return the correct split", func(t *testing.T) {
-		testCase := []struct {
-			desc         string
-			inputPlayer  *Player
-			inputNumber  int
-			wantedPlayer *Player
-		}{
-			{desc: "Given player {0, 4} and input number 1 should return {1, 3}", inputPlayer: &Player{0, 4}, inputNumber: 1, wantedPlayer: &Player{1, 3}},
-			{desc: "Given player {0, 4} and input number 2 should return {2, 2}", inputPlayer: &Player{0, 4}, inputNumber: 2, wantedPlayer: &Player{2, 2}},
-			{desc: "Given player {4, 0} and input number 1 should return {3, 1}", inputPlayer: &Player{4, 0}, inputNumber: 1, wantedPlayer: &Player{3, 1}},
-			{desc: "Given player {4, 0} and input number 2 should return {2, 2}", inputPlayer: &Player{4, 0}, inputNumber: 2, wantedPlayer: &Player{2, 2}},
-		}
-		for _, tcase := range testCase {
-			tcase := tcase
-			//Act
-			t.Run(tcase.desc, func(t *testing.T) {
-				t.Parallel()
-				tcase.inputPlayer.splitWithZeroFour(tcase.inputNumber)
-				//Asset
-				if !reflect.DeepEqual(tcase.inputPlayer, tcase.wantedPlayer) {
-					t.Errorf("Error: got %v but wanted %v\n", tcase.inputPlayer, tcase.wantedPlayer)
-				}
-			})
-		}
-	})
 }
 
 func TestPlayAttacktOperationsImpl(t *testing.T) {
@@ -103,7 +78,7 @@ func TestPlayAttacktOperationsImpl(t *testing.T) {
 			oponentHand         string
 		}{
 			{desc: "Given an attacker player{0,3} and a oponent{3,2}, an attack hand r, and a oponent hand r, return oponent{3,5}", attackerPlayer: &Player{0, 3}, oponentPlayerInput: &Player{3, 2},
-				attackerHand: "r", oponentHand: "r", oponentPlayerOutput: &Player{3, 5}},
+				attackerHand: "r", oponentHand: "r", oponentPlayerOutput: &Player{3, 0}},
 			{desc: "Given an attacker player{2,1} and a oponent{2,2}, an attack hand l, and a oponent hand r, return oponent{2, 4}", attackerPlayer: &Player{2, 1}, oponentPlayerInput: &Player{2, 2},
 				attackerHand: "l", oponentHand: "r", oponentPlayerOutput: &Player{2, 4}},
 			{desc: "Given an attacker player{0,3} and a oponent{3,2}, an attack hand l, and a oponent hand r, return the same oponent", attackerPlayer: &Player{0, 3}, oponentPlayerInput: &Player{3, 2},
